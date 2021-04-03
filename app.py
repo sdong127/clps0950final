@@ -23,7 +23,13 @@ app = Flask(__name__)
 #
 # print(charts)
 
-
+### asking the user to run again ###
+def search_again():
+    again_input = input('Would you like to search for another song? Type Yes or No: ')
+    if again_input == 'Yes':
+        intro()
+    else:
+        print('Thank you for using the Billboard Song Search! Have a nice day :)')
 
 ### NAIVE SONG SEARCH ###
 def naive_song_search(song_input):
@@ -32,17 +38,7 @@ def naive_song_search(song_input):
         for row in charts:
             if song_input == row[2]:
                 print('On ' + row[0] + ' ' + song_input + ' ranked at #' + row[1] + ' on the Billboard Hot 100 Chart.')
-                again_input = input('Would you like to search for another song? Type Yes or No: ')
-                if again_input == 'Yes':
-                    intro()
-                else:
-                    print('Thank you for using the Billboard Song Search! Have a nice day :)')
-            else:
-                again_input = input('Sorry, we couldn\'t find that song. Would you like to try again? Type Yes or No: ')
-                if again_input == 'Yes':
-                    intro()
-                else:
-                    print('Thank you for using the Billboard Song Search! Have a nice day :)')
+        search_again()
 
 ### PARTIAL SONG SEARCH ###
 def partial_song_search(song_input):
@@ -66,11 +62,7 @@ def partial_song_search(song_input):
             actual_song = unique_series[int(index_input)]
             naive_song_search(actual_song)
         else:
-            fail_input = input('Sorry, want to try again? Type Yes or No: ')
-            if fail_input == 'Yes':
-                intro()
-            else:
-                print('Thank you for using the Billboard Song Search! Have a nice day :)')
+            search_again()
 
 ### NAIVE ARTIST SEARCH ###
 def naive_artist_search(artist_input):
@@ -80,6 +72,7 @@ def naive_artist_search(artist_input):
         for row in charts:
             if artist_input == row[3]:
                 print('\'' + row[2] + '\'' + ' ranked ' + row[1] + ' on the Billboard Charts on ' + row[0])
+        search_again()
 
 ### PARTIAL ARTIST SEARCH ###
 def partial_artist_search(artist_input):
@@ -103,12 +96,35 @@ def partial_artist_search(artist_input):
             actual_song = unique_series[int(index_input)]
             naive_artist_search(actual_song)
         else:
-            fail_input = input('Sorry, want to try again? Type Yes or No: ')
-            if fail_input == 'Yes':
-                intro()
-            else:
-                print('Thank you for using the Billboard Song Search! Have a nice day :)')
+            search_again()
 
+### searching by date ###
+def date_search(date_input):
+    with open('charts.csv', 'r') as file:
+        charts = csv.reader(file)
+        print('Would you like to search for?\n '
+                '1. all songs that ranked at this date or\n'
+                '2. the #1 song at this date or\n'
+                '3. the song at a specific rank\n')
+        all_or_rank = input('Enter the corresponding number to the option you want: ')
+        if all_or_rank == '1':
+            for row in charts:
+                if date_input == row[0]:
+                    print(row[2] + ' by ' + row[3] + ' was ranked ' + '#' + row[1] + '.')
+            search_again()
+        elif all_or_rank == '2':
+            for row in charts:
+                if date_input == row[0]:
+                    if row[1] == '1':
+                        print(row[2] + ' by ' + row[3] + ' was ranked #1.')
+            search_again()
+        elif all_or_rank == '3':
+            rank_input = input('What rank from this day would you like to see? Enter a number 1-100: ')
+            for row in charts:
+                if date_input == row[0]:
+                    if row[1] == rank_input:
+                        print(row[2] + ' by ' + row[3] + ' was ranked #' + rank_input)
+            search_again()
 
 def intro():
     print('What would you like to search?\n'
@@ -133,7 +149,11 @@ def intro():
                                  'A naive search is one in which you have to search the exact title with the correct capitalization.\n'
                                  'A partial search is one in which you can search any keywords, case insensitive.\n'
                                  'Type Naive or Partial to get started: ')
-    # elif type_input == '2':
+    elif type_input == '2':
+        date_input = input(
+            'What Saturday are you interested in finding songs? Please enter it in the format YYYY-MM-DD: ')
+        date_search(date_input)
+
         #search by date functions
     elif type_input == '3': #search by artist
         search_input = input('What type of search would you like to do?\n'
