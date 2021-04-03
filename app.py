@@ -2,6 +2,8 @@ from flask import Flask
 import csv
 import pandas as pd
 import numpy as np
+from datetime import date
+from datetime import timedelta
 
 app = Flask(__name__)
 #
@@ -98,12 +100,26 @@ def partial_artist_search(artist_input):
         else:
             search_again()
 
+
 ### searching by date ###
-def date_search(date_input):
+def date_search(date_input): # YYYY-MM-DD
+    date_input = date_input.split('-')
+    # print(date_input)
+    new_date = date(int(date_input[0]), int(date_input[1]), int(date_input[2]))
+    # print(new_date)
+    new_date2 = new_date.weekday()
+    # print(new_date2)
+    my_saturday_change = new_date2 - 5
+    # print(my_saturday_change)
+    my_sat_delta = my_saturday_change + 7
+    # print(my_sat_delta)
+    date_input_old = new_date - timedelta(days=my_sat_delta)
+    date_input = str(date_input_old)
+    # print(date_input)
     with open('charts.csv', 'r') as file:
         charts = csv.reader(file)
-        print('Would you like to search for?\n '
-                '1. all songs that ranked at this date or\n'
+        print('Would you like to search for?\n'
+                '1. all songs that ranked that week or\n'
                 '2. the #1 song at this date or\n'
                 '3. the song at a specific rank\n')
         all_or_rank = input('Enter the corresponding number to the option you want: ')
@@ -125,6 +141,8 @@ def date_search(date_input):
                     if row[1] == rank_input:
                         print(row[2] + ' by ' + row[3] + ' was ranked #' + rank_input)
             search_again()
+
+### searching by dates that are not saturdays ###
 
 def intro():
     print('What would you like to search?\n'
