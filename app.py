@@ -27,11 +27,14 @@ app = Flask(__name__)
 
 ### asking the user to run again ###
 def search_again():
-    again_input = input('Would you like to search for another song? Type Yes or No: ')
+    again_input = input('Would you like to search for another song, artist, or date? Type Yes or No: ')
     if again_input == 'Yes':
         intro()
-    else:
+    elif again_input == 'No':
         print('Thank you for using the Billboard Song Search! Have a nice day :)')
+    else:
+        print('Sorry, didn\'t understand that. Please try again.')
+        search_again()
 
 ### NAIVE SONG SEARCH ###
 def naive_song_search(song_input):
@@ -70,10 +73,33 @@ def partial_song_search(song_input):
 def naive_artist_search(artist_input):
     with open('charts.csv', 'r') as file:
         charts = csv.reader(file)
-        print(artist_input + '\'s songs: ')
-        for row in charts:
-            if artist_input == row[3]:
-                print('\'' + row[2] + '\'' + ' ranked ' + row[1] + ' on the Billboard Charts on ' + row[0])
+        choice_input = input('Do you want to see 1. all of this artist\'s song rankings or '
+                             '2. just the highest rankings for each unique song? Type 1 or 2: ')
+        if choice_input == '1':
+            print(artist_input + '\'s songs: ')
+            for row in charts:
+                if artist_input == row[3]:
+                    print('\'' + row[2] + '\'' + ' ranked ' + row[1] + ' on the Billboard Charts on ' + row[0])
+        elif choice_input == '2':
+            print(artist_input + '\'s songs: ')
+            song_dict = {}
+            for row in charts:
+                if artist_input == row[3]:
+                    if row[2] in song_dict.keys():
+                        song_dict[row[2]][0].append(row[1])
+                        song_dict[row[2]][1].append(row[0])
+                    else:
+                        song_dict[row[2]] = ([row[1]], [row[0]])
+            for key in song_dict:
+                ranks = []
+                indices = []
+                for index, rank in enumerate(song_dict[key][0]):
+                    ranks.append(rank)
+                    indices.append(index)
+                top_rank = min(ranks)
+                top_date_index = ranks.index(min(ranks))
+                (top_rank, rank_date) = (top_rank, song_dict[key][1][top_date_index])
+                print('\'' + key + '\'' + ' ranked ' + top_rank + ' on the Billboard Charts on ' + rank_date)
         search_again()
 
 ### PARTIAL ARTIST SEARCH ###
@@ -95,8 +121,8 @@ def partial_artist_search(artist_input):
         correction_input = input('Did you mean one of these artists? Type Yes or No: ')
         if correction_input == 'Yes':
             index_input = input('Enter the corresponding number to the artist you meant: ')
-            actual_song = unique_series[int(index_input)]
-            naive_artist_search(actual_song)
+            actual_artist = unique_series[int(index_input)]
+            naive_artist_search(actual_artist)
         else:
             search_again()
 
