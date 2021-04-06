@@ -38,11 +38,15 @@ def search_again():
 
 ### NAIVE SONG SEARCH ###
 def naive_song_search(song_input):
+    found = False
     with open('charts.csv', 'r') as file:
         charts = csv.reader(file)
         for row in charts:
             if song_input == row[2]:
                 print('On ' + row[0] + ' ' + song_input + ' ranked at #' + row[1] + ' on the Billboard Hot 100 Chart.')
+                found = True
+        if not found:
+            print('Sorry, we couldn\'t find your song.')
         search_again()
 
 ### PARTIAL SONG SEARCH ###
@@ -71,6 +75,7 @@ def partial_song_search(song_input):
 
 ### NAIVE ARTIST SEARCH ###
 def naive_artist_search(artist_input):
+    found = False
     with open('charts.csv', 'r') as file:
         charts = csv.reader(file)
         choice_input = input('Do you want to see 1. all of this artist\'s song rankings or '
@@ -80,6 +85,9 @@ def naive_artist_search(artist_input):
             for row in charts:
                 if artist_input == row[3]:
                     print('\'' + row[2] + '\'' + ' ranked ' + row[1] + ' on the Billboard Charts on ' + row[0])
+                    found = True
+            if not found:
+                print('Sorry, we couldn\'t find your song.')
         elif choice_input == '2':
             print(artist_input + '\'s songs: ')
             song_dict = {}
@@ -88,8 +96,13 @@ def naive_artist_search(artist_input):
                     if row[2] in song_dict.keys():
                         song_dict[row[2]][0].append(row[1])
                         song_dict[row[2]][1].append(row[0])
+                        found = True
                     else:
                         song_dict[row[2]] = ([row[1]], [row[0]])
+                        found = True
+            if not found:
+                return ('Sorry, we couldn\'t find your song.')
+
             for key in song_dict:
                 ranks = []
                 indices = []
@@ -113,7 +126,10 @@ def partial_artist_search(artist_input):
             check = all(word in artist_name for word in partial_name)
             if check is True:
                 artist_list.append(row[3])
-        artist_series = pd.Series(data=artist_list)
+        if not check:
+            print('sorry')
+            return
+        artist_series = pd.Series(data=artist_list) ##error here
         unique_series = pd.Series(artist_series.unique())
         pd.options.display.max_rows = None
         pd.options.display.max_columns = None
@@ -129,6 +145,7 @@ def partial_artist_search(artist_input):
 
 ### searching by date ###
 def date_search(date_input): # YYYY-MM-DD
+    found = False
     date_input = date_input.split('-')
     # print(date_input)
     new_date = date(int(date_input[0]), int(date_input[1]), int(date_input[2]))
@@ -153,12 +170,18 @@ def date_search(date_input): # YYYY-MM-DD
             for row in charts:
                 if date_input == row[0]:
                     print(row[2] + ' by ' + row[3] + ' was ranked ' + '#' + row[1] + '.')
+                    found = True
+            if not found:
+                print('Sorry, we couldn\'t find your song.')
             search_again()
         elif all_or_rank == '2':
             for row in charts:
                 if date_input == row[0]:
                     if row[1] == '1':
                         print(row[2] + ' by ' + row[3] + ' was ranked #1.')
+                        found = True
+            if not found:
+                print('Sorry, we couldn\'t find your song.')
             search_again()
         elif all_or_rank == '3':
             rank_input = input('What rank from this day would you like to see? Enter a number 1-100: ')
@@ -166,11 +189,16 @@ def date_search(date_input): # YYYY-MM-DD
                 if date_input == row[0]:
                     if row[1] == rank_input:
                         print(row[2] + ' by ' + row[3] + ' was ranked #' + rank_input)
+                        found = True
+            if not found:
+                print('Sorry, we couldn\'t find your song.')
             search_again()
 
 ### searching by dates that are not saturdays ###
 
 def intro():
+    print('Welcome to the Billboard Song Search by team HASH!\n'
+          'You have access to weekly Billboard charts starting from August 4th, 1958, to March 13th, 2021.')
     print('What would you like to search?\n'
           '1. Search by song: the ranks achieved by a certain song on the Billboard charts\n' #song_search
           '2. Search by date: what song achieved what rank on a specific day\n' #time_search not done yet
