@@ -2,5 +2,9 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/practical-machine-learning-with-python" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/startbootstrap-landing-page" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/unicodedata2" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/unicodedata2/multibuild" vcs="Git" />
   </component>
 </project>
