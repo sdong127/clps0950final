@@ -16,22 +16,21 @@ import pandas as pd
 import numpy as np
 import nltk
 from nltk.tokenize.toktok import ToktokTokenizer
-# nltk.download('stopwords')
 import re
 from bs4 import BeautifulSoup
 from contractions import CONTRACTION_MAP
 import unicodedata2
-pip install unicodedata
-# from unicodedata2 import normalize
+from unicodedata2 import normalize
+
 
 nlp = spacy.load('en_core_web_sm')
 #nlp_vec = spacy.load('en_vecs', parse = True, tag=True, #entity=True)
 tokenizer = ToktokTokenizer()
-stopword_list = nltk.corpus.stopwords.words('english')
-stopword_list.remove('no')
-stopword_list.remove('not')
+# stopword_list = nltk.corpus.stopwords.words('english')
+# stopword_list.remove('no')
+# stopword_list.remove('not')
 
-## removing html tags ##
+# removing html tags ##
 def strip_html_tags(text):
     soup = BeautifulSoup(text, "html.parser")
     stripped_text = soup.get_text()
@@ -98,17 +97,17 @@ lemmatize_text("My system keeps crashing! his crashed yesterday, ours crashes da
 
 ## removing stopwords ##
 
-def remove_stopwords(text, is_lower_case=False):
-    tokens = tokenizer.tokenize(text)
-    tokens = [token.strip() for token in tokens]
-    if is_lower_case:
-        filtered_tokens = [token for token in tokens if token not in stopword_list]
-    else:
-        filtered_tokens = [token for token in tokens if token.lower() not in stopword_list]
-    filtered_text = ' '.join(filtered_tokens)
-    return filtered_text
-
-remove_stopwords("The, and, if are stopwords, computer is not")
+# def remove_stopwords(text, is_lower_case=False):
+#     tokens = tokenizer.tokenize(text)
+#     tokens = [token.strip() for token in tokens]
+#     if is_lower_case:
+#         filtered_tokens = [token for token in tokens if token not in stopword_list]
+#     else:
+#         filtered_tokens = [token for token in tokens if token.lower() not in stopword_list]
+#     filtered_text = ' '.join(filtered_tokens)
+#     return filtered_text
+#
+# remove_stopwords("The, and, if are stopwords, computer is not")
 
 ## all together ##
 
@@ -145,9 +144,22 @@ def normalize_corpus(corpus, html_stripping=True, contraction_expansion=True,
             # remove extra whitespace
         doc = re.sub(' +', ' ', doc)
         # remove stopwords
-        if stopword_removal:
-            doc = remove_stopwords(doc, is_lower_case=text_lower_case)
+        # if stopword_removal:
+        #     doc = remove_stopwords(doc, is_lower_case=text_lower_case)
 
         normalized_corpus.append(doc)
 
     return normalized_corpus
+
+
+data = [['us unveils world powerful supercomputer beat china','us unveil world powerful supercomputer call summit beat previous record holder china sunway taihulight peak performance trillion calculation per second twice fast sunway taihulight capable trillion calculation per second summit server reportedly take size two tennis court']]
+news_df = pd.DataFrame(data,columns = ['news_headline','news_article'])
+# combining headline and article text
+news_df['full_text'] = news_df['news_headline'].map(str)+ '. ' + news_df['news_article']
+
+# pre-process text and store the same
+news_df['clean_text'] = normalize_corpus(news_df['full_text'])
+norm_corpus = list(news_df['clean_text'])
+
+# show a sample news article
+news_df.iloc[1][['full_text', 'clean_text']].to_dict()
