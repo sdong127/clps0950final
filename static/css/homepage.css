@@ -10026,7 +10026,7 @@ h3 {
 header.masthead {
   position: relative;
   background-color: #343a40;
-  background: url("/static/images/musicnotes_bg.jpeg") no-repeat center center;
+  background: url('../images/musicnotes_bg.jpeg') no-repeat center center;
   background-size: cover;
   padding-top: 8rem;
   padding-bottom: 8rem;
