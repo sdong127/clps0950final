@@ -19,7 +19,7 @@ from nltk.tokenize.toktok import ToktokTokenizer
 import re
 from bs4 import BeautifulSoup
 from contractions import CONTRACTION_MAP
-import unicodedata2
+# import unicodedata2
 
 ## RUN THIS IF YOU HAVE TROUBLE WITH DOWNLOADING NLTK STOPWORDS DUE TO SSL CERTIFICATE ERROR
 # install_certifi.py
@@ -197,7 +197,7 @@ def normalize_search(search, html_stripping=True, contraction_expansion=True,
         # strip HTML
         if html_stripping:
             word = strip_html_tags(word)
-            print(word)
+            # print(word)
         # remove accented characters
         # if accented_char_removal:
         #     word = remove_accented_chars(word)
@@ -207,7 +207,7 @@ def normalize_search(search, html_stripping=True, contraction_expansion=True,
         # lowercase the text
         if text_lower_case:
             word = word.lower()
-            print(word)
+            # print(word)
         # remove extra newlines
         word = re.sub(r'[\r|\n|\r\n]+', ' ', word)
         # lemmatize text
@@ -219,7 +219,7 @@ def normalize_search(search, html_stripping=True, contraction_expansion=True,
             special_char_pattern = re.compile(r'([{.(-)!}])')
             word = special_char_pattern.sub(" \\1 ", word)
             word = remove_special_characters(word, remove_digits=remove_digits)
-            print(word)
+            # print(word)
             # remove extra whitespace
         word = re.sub(' +', ' ', word)
         # remove stopwords
@@ -227,13 +227,16 @@ def normalize_search(search, html_stripping=True, contraction_expansion=True,
         #     word = remove_stopwords(word, is_lower_case=text_lower_case)
         if fixed:
             word = correction(word)
-            print(word)
-        search_output = normalized_search.append(str(word))
-    print(search_output)
-    print(type(search_output))
-    list_to_str = ''.join([str(item) for item in search_output])
+            # print(word)
 
-    return list_to_str
+        normalized_search = [*normalized_search, word]
+    # print(normalized_search)
+        # print(type(normalized_search))
+
+    # print(type(search_output))
+    list_to_str = ' '.join([str(item) for item in normalized_search])
+    print(list_to_str)
+    # return list_to_str
 
 
 # ## TEST EXAMPLE CASE WITH NEWS ARTICLES ##
