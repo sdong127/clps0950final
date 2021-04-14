@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
+<!doctype html>
+<html>
+   <body>
+   {% if search_option == 1 %}
+     {% for row in charts %}
+         {% name = 'You Belong With Me' %}
+         {% if name == row[2] %}
+           <h5> {% print('On ' + row[0] + ' ' + name + ' ranked at #' + row[1] + ' on the Billboard Hot 100 Chart.\n') %} </h5>
+         {%  endif %}
+     {% endfor %}
+   </body>
 </html>
