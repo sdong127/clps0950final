@@ -1,4 +1,4 @@
-from flask import Flask,render_template
+from flask import Flask,render_template, request
 import csv
 import pandas as pd
 import numpy as np
@@ -14,17 +14,22 @@ from bs4 import BeautifulSoup
 from contractions import CONTRACTION_MAP
 import re
 from collections import Counter
-import request
+
 
 nlp = spacy.load('en_core_web_sm')
 
 app = Flask(__name__)
 
 
-@app.route('/', methods=['GET'])
-def homepage():
-    return render_template('homepage.html')
+# @app.route('/', methods=['GET'])
+# def homepage():
+#     return render_template('homepage.html')
 
+options = ['1', '2', '3']
+
+@app.route('/', methods=['GET'])
+def dropdown():
+    return render_template('homepage.html', options=options)
 
 if __name__ == '__main__':
     app.run()

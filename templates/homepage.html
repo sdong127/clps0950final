@@ -23,8 +23,16 @@
             <div class="overlay"></div>
             <div class="container">
                 <div class="row">
-                    <div class="col-xl-9 mx-auto"><h1 class="mb-5">hi team HASH! :)</h1></div>
+                    <div class="col-xl-9 mx-auto"><h1 class="mb-5">Welcome to Billboard Song Search!</h1></div>
                     <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+                        <form>
+                            <select name = "options" method = "GET" action = "/">
+                                <option value = "{{ options[0] }}" selected>pick one</option>
+                                {% for option in options %}
+                                    <option value="{{ option }}">{{ option }}</option>
+                                {% endfor %}
+                            </select>
+                        </form>
                         <form>
                             <div class="form-row">
                                 <div class="col-12 col-md-3"><button class="btn btn-block btn-lg btn-primary" type="submit">1</button></div>
