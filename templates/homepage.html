@@ -25,7 +25,7 @@
                 <div class="row">
                     <div class="col-xl-9 mx-auto"><h1 class="mb-5">Welcome to Billboard Song Search!</h1></div>
                     <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-                        <form>
+                        <form action = "/song/" method = "post">
                             <select name = "options" method = "GET" action = "/">
                                 <option value = "{{ options[0] }}" selected>pick one</option>
                                 <option value = "{{ options[1] }}" >1</option>
@@ -37,6 +37,7 @@
                                 <option value = "{{ norp[1] }}" >Naive</option>
                                 <option value = "{{ norp[2] }}" >Partial</option>
                             </select>
+                            <p align="center"><a href="~/song.html" ><button class=grey style="height:50px;width:100px" >Search</button></a></p>
                         </form>
                         <form>
                             <div class="form-row">

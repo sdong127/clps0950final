@@ -18,31 +18,32 @@ from collections import Counter
 
 
 app = Flask(__name__)
-
+options = [0, 1, 2, 3]
+norp = ['None', 'Naive', 'Partial']
 
 @app.route('/', methods=['GET'])
 def homepage():
+    print('hello')
     return render_template('homepage.html', options=options, norp=norp)
 
-options = ['1', '2', '3']
-norp = ['Naive', 'Partial']
 
-# @app.route('/', methods=['POST'])
-# def options():
-#     selectValue = request.form.get('options')
-#     return redirect(url_for('search'),selectValue=selectValue)
-#
-#
-# @app.route('/search', methods=['GET'])
-# def search():
-#     search_option = options()
-#     with open('charts.csv', 'r') as file:
-#         charts = csv.reader(file)
-#         data = list(charts)
-#         return render_template('song.html', search_option=search_option, charts=data)
+def dropdown():
+    selectValue = request.form.get('options')
+    print(selectValue)
+    return selectValue
+
+@app.route('/song/', methods=['POST'])
+def search():
+    search_option = dropdown()
+    print('hi')
+    with open('charts.csv', 'r') as file:
+        charts = csv.reader(file)
+        data = list(charts)
+        return render_template('song.html', search_option=search_option, charts=data)
+
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
 
 
 
