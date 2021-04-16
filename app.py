@@ -1,19 +1,10 @@
 from flask import Flask,render_template, request, redirect, url_for
-import csv
-import pandas as pd
-import numpy as np
-from datetime import date
-from datetime import timedelta
 import spacy
 import pandas as pd
 import numpy as np
-import nltk
-from nltk.tokenize.toktok import ToktokTokenizer
-import re
-from bs4 import BeautifulSoup
 from contractions import CONTRACTION_MAP
 import re
-from collections import Counter
+
 
 
 
