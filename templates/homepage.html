@@ -25,26 +25,31 @@
                 <div class="row">
                     <div class="col-xl-9 mx-auto"><h1 class="mb-5">Welcome to Billboard Song Search!</h1></div>
                     <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+                        <p>1. Search by song: the ranks achieved by a certain song on the Billboard charts<br>
+                            2. Search by artist: songs by a certain artist that made the charts and when<br></p>
+                        <p> A NAIVE search is one in which you have to search the exact title with the correct capitalization <br>
+                            A PARTIAL search is one in which you can search any keywords, case insensitive</p>
                         <form action = "/song/" method = "post">
                             <select name = "options" method = "GET" action = "/">
                                 <option value = "{{ options[0] }}" selected>pick one</option>
-                                <option value = "{{ options[1] }}" >1</option>
-                                <option value = "{{ options[2] }}" >2</option>
-                                <option value = "{{ options[3] }}" >3</option>
+                                <option value = "{{ options[1] }}" >Song</option>
+                                <option value = "{{ options[2] }}" >Artist</option>
                             </select>
                             <select name = "norp" method = "GET" action = "/">
                                 <option value = "{{ norp[0] }}" selected>pick one</option>
                                 <option value = "{{ norp[1] }}" >Naive</option>
                                 <option value = "{{ norp[2] }}" >Partial</option>
                             </select>
+                            <p>Type:</p> <p><input type = "text" name = "song_artist" /></p>
+                            <p>OR</p>
+{#                        <div>#}
+{#                            <P>Search by date: the song data of the chart at a certain week <br>#}
+{#                            Please enter the date in this format: YYYY-MM-DD</P>#}
+{#                            <p>Date:</p> <p><input type = "text" name = "nm" /></p>#}
+{#                            <p>Please enter a rank 1-100 that you are interested in seeing. Enter 0 if you would like to see the entire Top 100 at this date.</p>#}
+{#                            <p>Rank:</p> <p><input type = "text" name = "nm" /></p>#}
                             <p align="center"><a href="~/song.html" ><button class=grey style="height:50px;width:100px" >Search</button></a></p>
-                        </form>
-                        <form>
-                            <div class="form-row">
-                                <div class="col-12 col-md-3"><button class="btn btn-block btn-lg btn-primary" type="submit">1</button></div>
-                                <div class="col-12 col-md-3"><button class="btn btn-block btn-lg btn-primary" type="submit">2</button></div>
-                                <div class="col-12 col-md-3"><button class="btn btn-block btn-lg btn-primary" type="submit">3</button></div>
-                            </div>
+{#                        </div>#}
                         </form>
                     </div>
                 </div>

@@ -1,12 +1,73 @@
 <!doctype html>
 <html>
    <body>
-        {% if search_option == '1' %}
+        {% set vars = {'found_naive_song': False} %}
+        {% if search_option == '1' and norp_option == 'Naive' %}
             {% for row in charts %}
-                {% if 'You Belong With Me' == row[2] %}
-                <h5> {% print('On ' + row[0] + ' You Belong With Me ranked at #' + row[1] + ' on the Billboard Hot 100 Chart.\n') %} </h5>
-                {%  endif %}
+                {% if song_name == row[2] %}
+                <h5> {% print('On ' + row[0] + ' ' + song_name + ' ranked at # ' + row[1] + ' on the Billboard Hot 100 Chart.') %} </h5>
+                    {% if vars.update({'found_naive_song': True}) %}
+                    {% endif %}
+                {% endif %}
             {% endfor %}
+            {% if not vars.found_naive_song %}
+                <h5> {% print('Sorry, we couldn\'t find your song.') %}</h5>
+            {% endif %}
         {% endif %}
+
+        {# partial song search #}
+        {% if search_option == '1' and norp_option == 'Partial' %}
+        {% set partial_title = song_name.lower().split(' ') %}
+        {% set song_list = [] %}
+        {% set vars = {'found_partial_song': False} %}
+            {% for row in charts %}
+                {% set song_title = row[2].lower().split(' ')%}
+                {% for word in partial_title %}
+                    {% if word in song_title %}
+                        {% set vars = {'check': True} %}
+                    {% else %}
+                        {% if vars.update({'check': False}) %}
+                        {% endif %}
+                    {% endif %}
+                    {% if vars.update({'check': True}) %}
+                        {{ song_list.append(row[2]) }}
+                        {% if vars.update({'found_partial_song': True}) %}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+            {% if not found_partial_song %}
+                {% set normalize_song = normalize_search(song_name) %}
+                {% print(normalize_song) %}
+            {% endif %}
+        {% endif %}
+{#                clarify = input('Did you mean ' + '\'' + normalize_song + '\'' + '? Enter Yes or No: ')#}
+{#                if clarify == 'Yes' or clarify == 'yes':#}
+{#                    return partial_song_search(normalize_song)#}
+{#                elif clarify == 'No' or clarify == 'no':#}
+{#                    print('Sorry, we couldn\'t find your song. Please try again.')#}
+{#                    return search_again()#}
+{#                else:#}
+{#                    print('Sorry, we didn\'t recognize that. Please try again.')#}
+{#                    return search_again()#}
+{#            song_series = pd.Series(data=song_list)#}
+{#            unique_series = pd.Series(song_series.unique())#}
+{#            pd.options.display.max_columns = None#}
+{#            pd.options.display.max_rows = None#}
+{#            print(unique_series)#}
+{#            if not unique_series.empty:#}
+{#                correction_input = input('Did you mean one of these songs? Enter Yes or No: ')#}
+{#                if correction_input == 'Yes' or correction_input == 'yes':#}
+{#                    index_input = input('Enter the corresponding number to the song you meant: ')#}
+{#                    actual_song = unique_series[int(index_input)]#}
+{#                    return naive_song_search(actual_song)#}
+{#                elif correction_input == 'No' or correction_input == 'no':#}
+{#                    print('Sorry, we couldn\'t find your song. Please try again.')#}
+{#                else:#}
+{#                    print('Sorry, we didn\'t understand that. Please try again.')#}
+{#            else:#}
+{#                print('Sorry, we couldn\'t find your song. Please try again.')#}
+{#        search_again()#}
+
    </body>
 </html>
