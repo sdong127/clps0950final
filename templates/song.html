@@ -37,8 +37,9 @@
                 {% endfor %}
             {% endfor %}
             {% if not found_partial_song %}
-                {% set normalize_song = normalize_search(song_name) %}
-                {% print(normalize_song) %}
+{#                {{ normalize_search(song_name) }}#}
+{#                {%  set normalize_song = normalize_search(song_name) %}#}
+                {% print('hi') %}
             {% endif %}
         {% endif %}
 {#                clarify = input('Did you mean ' + '\'' + normalize_song + '\'' + '? Enter Yes or No: ')#}
