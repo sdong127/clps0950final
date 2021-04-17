@@ -37,38 +37,37 @@
                 {% endfor %}
             {% endfor %}
             {% if not found_partial_song %}
-            <form> action = "/song/" method = "get">
+            <form action = "/song/" method = "get">
                 <h4> {% print('Did you mean ' + '\'' + normalize_input + '\'' + '? Enter Yes or No: ') %} </h4>
                 <p>Type:</p> <p><input type = "text" name = "clarify" /></p>
             </form>
-{#                if clarify == 'Yes' or clarify == 'yes':#}
-{#                    return partial_song_search(normalize_song)#}
-{#                elif clarify == 'No' or clarify == 'no':#}
-{#                    print('Sorry, we couldn\'t find your song. Please try again.')#}
-{#                    return search_again()#}
-{#                else:#}
-{#                    print('Sorry, we didn\'t recognize that. Please try again.')#}
-{#                    return search_again()#}
+                <p align="center"><a href="~/partial_song_redo.html" ><button class=grey style="height:50px;width:100px" >Go!</button></a></p>
+                {% if clarify == 'Yes' or clarify == 'yes' %}
+                    return partial_song_search(normalize_song)
+                elif clarify == 'No' or clarify == 'no':
+                    print('Sorry, we couldn\'t find your song. Please try again.')
+                    return search_again()
+                else:
+                    print('Sorry, we didn\'t recognize that. Please try again.')
+                    return search_again()
+                {% endif %}
             {% endif %}
         {% endif %}
-{#            song_series = pd.Series(data=song_list)#}
-{#            unique_series = pd.Series(song_series.unique())#}
-{#            pd.options.display.max_columns = None#}
-{#            pd.options.display.max_rows = None#}
-{#            print(unique_series)#}
-{#            if not unique_series.empty:#}
-{#                correction_input = input('Did you mean one of these songs? Enter Yes or No: ')#}
-{#                if correction_input == 'Yes' or correction_input == 'yes':#}
-{#                    index_input = input('Enter the corresponding number to the song you meant: ')#}
-{#                    actual_song = unique_series[int(index_input)]#}
-{#                    return naive_song_search(actual_song)#}
-{#                elif correction_input == 'No' or correction_input == 'no':#}
-{#                    print('Sorry, we couldn\'t find your song. Please try again.')#}
-{#                else:#}
-{#                    print('Sorry, we didn\'t understand that. Please try again.')#}
-{#            else:#}
-{#                print('Sorry, we couldn\'t find your song. Please try again.')#}
-{#        search_again()#}
+            song_series = pd.Series(data=song_list)
+            unique_series = pd.Series(song_series.unique())
+            if not unique_series.empty:
+                correction_input = input('Did you mean one of these songs? Enter Yes or No: ')
+                if correction_input == 'Yes' or correction_input == 'yes':
+                    index_input = input('Enter the corresponding number to the song you meant: ')
+                    actual_song = unique_series[int(index_input)]
+                    return naive_song_search(actual_song)
+                elif correction_input == 'No' or correction_input == 'no':
+                    print('Sorry, we couldn\'t find your song. Please try again.')
+                else:
+                    print('Sorry, we didn\'t understand that. Please try again.')
+            else:
+                print('Sorry, we couldn\'t find your song. Please try again.')
+        search_again()
 
    </body>
 </html>
