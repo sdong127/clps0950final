@@ -37,12 +37,10 @@
                 {% endfor %}
             {% endfor %}
             {% if not found_partial_song %}
-{#                {{ normalize_search(song_name) }}#}
-{#                {%  set normalize_song = normalize_search(song_name) %}#}
-                {% print('hi') %}
-            {% endif %}
-        {% endif %}
-{#                clarify = input('Did you mean ' + '\'' + normalize_song + '\'' + '? Enter Yes or No: ')#}
+            <form> action = "/song/" method = "get">
+                <h4> {% print('Did you mean ' + '\'' + normalize_input + '\'' + '? Enter Yes or No: ') %} </h4>
+                <p>Type:</p> <p><input type = "text" name = "clarify" /></p>
+            </form>
 {#                if clarify == 'Yes' or clarify == 'yes':#}
 {#                    return partial_song_search(normalize_song)#}
 {#                elif clarify == 'No' or clarify == 'no':#}
@@ -51,6 +49,8 @@
 {#                else:#}
 {#                    print('Sorry, we didn\'t recognize that. Please try again.')#}
 {#                    return search_again()#}
+            {% endif %}
+        {% endif %}
 {#            song_series = pd.Series(data=song_list)#}
 {#            unique_series = pd.Series(song_series.unique())#}
 {#            pd.options.display.max_columns = None#}
