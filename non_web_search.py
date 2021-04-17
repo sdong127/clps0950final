@@ -6,6 +6,7 @@ import re
 from bs4 import BeautifulSoup
 import nltk
 from collections import Counter
+import sys
 
 
 ################################ SPELL CHECKER ################################
@@ -99,7 +100,7 @@ def search_again():
         return intro()
     elif again_input == 'No' or again_input == 'no':
         print('Thank you for using the Billboard Song Search! Have a nice day :)')
-        return
+        sys.exit()
     else:
         print('Sorry, we didn\'t understand that. Please try again.')
         return search_again()
@@ -115,8 +116,10 @@ def naive_song_search(song_input):
                 found_naive_song = True
         if not found_naive_song:
             print('Sorry, we couldn\'t find your song.')
-    search_again()
+    return search_again()
 
+
+partial_song_counter = 0
 ### PARTIAL SONG SEARCH ###
 def partial_song_search(song_input):
     partial_title = song_input.lower().split(' ')
@@ -130,10 +133,12 @@ def partial_song_search(song_input):
             if check is True:
                 song_list.append(row[2])
                 found_partial_song = True
-        if not found_partial_song:
+        global partial_song_counter
+        if not found_partial_song and partial_song_counter == 0:
             normalize_song = normalize_search(song_input)
             clarify = input('Did you mean ' + '\'' + normalize_song + '\'' + '? Enter Yes or No: ')
             if clarify == 'Yes' or clarify == 'yes':
+                partial_song_counter+=1
                 return partial_song_search(normalize_song)
             elif clarify == 'No' or clarify == 'no':
                 print('Sorry, we couldn\'t find your song. Please try again.')
@@ -158,7 +163,8 @@ def partial_song_search(song_input):
                 print('Sorry, we didn\'t understand that. Please try again.')
         else:
             print('Sorry, we couldn\'t find your song. Please try again.')
-    search_again()
+    partial_song_counter = 0
+    return search_again()
 
 ### NAIVE ARTIST SEARCH ###
 def naive_artist_search(artist_input):
@@ -200,11 +206,13 @@ def naive_artist_search(artist_input):
                 top_rank = min(ranks)
                 top_date_index = ranks.index(min(ranks))
                 (top_rank, rank_date) = (top_rank, song_dict[key][1][top_date_index])
-                print('\'' + key + '\'' + ' ranked ' + top_rank + ' on the Billboard Charts on ' + rank_date)
+                print('\'' + key + '\'' + ' ranked ' + top_rank + ' on the Billboard Charts on ' + rank_date + '.')
         else:
             print('Sorry, we didn\'t understand that. Please try again.')
-    search_again()
+    return search_again()
 
+
+partial_artist_counter = 0
 ### PARTIAL ARTIST SEARCH ###
 def partial_artist_search(artist_input):
     partial_name = artist_input.lower().split(' ')
@@ -219,10 +227,12 @@ def partial_artist_search(artist_input):
             if check is True:
                 artist_list.append(row[3])
                 found_partial_artist = True
-        if not found_partial_artist:
+        global partial_artist_counter
+        if not found_partial_artist and partial_artist_counter == 0:
             normalize_artist = normalize_search(artist_input)
             clarify = input('Did you mean ' + '\'' + normalize_artist + '\'' + '? Enter Yes or No: ')
             if clarify == 'Yes' or clarify == 'yes':
+                partial_artist_counter+=1
                 partial_artist_search(normalize_artist)
             elif clarify == 'No' or clarify == 'no':
                 print('Sorry, we couldn\'t find your artist. Please try again.')
@@ -243,11 +253,14 @@ def partial_artist_search(artist_input):
                 return naive_artist_search(actual_artist)
             elif correction_input == 'No' or correction_input == 'no':
                 print('Sorry, we couldn\'t find your artist. Please try again.')
+                return search_again()
             else:
                 print('Sorry, we didn\'t recognize that. Please try again.')
+                return search_again()
         else:
             print('Sorry, we couldn\'t find your artist. Please try again.')
-    search_again()
+            return search_again()
+    partial_artist_counter = 0
 
 
 
@@ -307,7 +320,7 @@ def date_search(date_input): # YYYY-MM-DD
                         print(row[2] + ' by ' + row[3] + ' was ranked #' + rank_input + '.')
         else:
             print('Sorry, we didn\'t understand that. Please try again.')
-    search_again()
+    return search_again()
 
 
 ## starting the search ##

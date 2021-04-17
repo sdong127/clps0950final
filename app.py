@@ -9,8 +9,11 @@ from bs4 import BeautifulSoup
 import nltk
 from collections import Counter
 
+
 app = Flask(__name__)
+
 options = [0, 1, 2]
+
 norp = ['None', 'Naive', 'Partial']
 
 
@@ -90,48 +93,6 @@ def normalize_search(search, html_stripping=True, text_lower_case=True, special_
     list_to_str = str(' '.join([str(item) for item in normalized_search]))
     return list_to_str
 
-def partial_song_search(song_input):
-    partial_title = song_input.lower().split(' ')
-    song_list = []
-    found_partial_song = False
-    with open('charts.csv', 'r') as file:
-        charts = csv.reader(file)
-        for row in charts:
-            song_title = row[2].lower().split(' ')
-            check = all(word in song_title for word in partial_title)
-            if check is True:
-                song_list.append(row[2])
-                found_partial_song = True
-        if not found_partial_song:
-            normalize_song = normalize_search(song_input)
-            clarify = input('Did you mean ' + '\'' + normalize_song + '\'' + '? Enter Yes or No: ')
-            if clarify == 'Yes' or clarify == 'yes':
-                return partial_song_search(normalize_song)
-            elif clarify == 'No' or clarify == 'no':
-                print('Sorry, we couldn\'t find your song. Please try again.')
-                return search_again()
-            else:
-                print('Sorry, we didn\'t recognize that. Please try again.')
-                return search_again()
-        song_series = pd.Series(data=song_list)
-        unique_series = pd.Series(song_series.unique())
-        pd.options.display.max_columns = None
-        pd.options.display.max_rows = None
-        print(unique_series)
-        if not unique_series.empty:
-            correction_input = input('Did you mean one of these songs? Enter Yes or No: ')
-            if correction_input == 'Yes' or correction_input == 'yes':
-                index_input = input('Enter the corresponding number to the song you meant: ')
-                actual_song = unique_series[int(index_input)]
-                return naive_song_search(actual_song)
-            elif correction_input == 'No' or correction_input == 'no':
-                print('Sorry, we couldn\'t find your song. Please try again.')
-            else:
-                print('Sorry, we didn\'t understand that. Please try again.')
-        else:
-            print('Sorry, we couldn\'t find your song. Please try again.')
-    # search_again()
-
 
 @app.route('/', methods=['GET'])
 def homepage():
@@ -149,6 +110,7 @@ def dropdown2():
     print(selectValue2)
     return selectValue2
 
+
 @app.route('/song/', methods=['POST'])
 def type_search():
     search_option = dropdown()
@@ -163,17 +125,10 @@ def type_search():
 
     # return redirect(url_for('result', name=song_name))
 
-# @app.route('/song/', methods=['POST'])
-# def n_or_p():
-#     norp_option = dropdown2()
-#     print('hi again')
-#     with open('charts.csv', 'r') as file:
-#         charts = csv.reader(file)
-#         data = list(charts)
-#         return render_template('song.html', norp_option=norp_option, charts=data)
-
-    # song_name = request.form['nm']
-    # return redirect(url_for('result', name=song_name))
+@app.route('/partialsong/', methods=['POST'])
+def partial_song_redo():
+    clarify = request.form['clarify']
+    return render_template('partial_song_redo.html',clarify=clarify)
 
 if __name__ == '__main__':
     app.run(debug=True)
