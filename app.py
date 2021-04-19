@@ -26,12 +26,12 @@ def dropdown():
     print(selectValue)
     return selectValue
 
+artist_options = [0, 1, 2]
+
 def artist_dropdown():
     selectValue2 = request.form.get('artist_options')
     print(selectValue2)
     return selectValue2
-
-artist_options = [0, 1, 2]
 
 def saturday_date(date_search):
     date_search = date_search.split('-')
@@ -41,6 +41,9 @@ def saturday_date(date_search):
     my_sat_delta = my_saturday_change + 7
     if my_sat_delta == 7:
         date_search = str(new_date)
+    elif my_sat_delta == 8:
+        this_saturday = new_date - timedelta(days=my_saturday_change)
+        date_search = str(this_saturday)
     else:
         this_saturday = new_date - timedelta(days=my_sat_delta)
         date_search = str(this_saturday)
@@ -55,13 +58,14 @@ def type_search():
     print(song_artist)
     print(date_search)
     print(rank_search)
-    if date_search == True:
-        print(date_search)
+    if date_search:
+        # print(date_search)
         date_input = saturday_date(date_search)
-        print(date_input)
+        # print(date_input)
+    if not date_search:
+        date_input = None
     # norp_option = dropdown2()
-    else:
-        return
+    print(date_input)
     with open('charts.csv', 'r') as file:
         charts = csv.reader(file)
         data = list(charts)
@@ -79,6 +83,9 @@ def artist_search():
         charts = csv.reader(file)
         data = list(charts)
     return render_template('artist.html', song_artist=song_artist, artist_option=artist_option, charts=data)
+
+# @app.route('/artist/', methods = ['POST'])
+# def each_search():
 
 # @app.route('/song/', methods=['POST'])
 # def song_search():

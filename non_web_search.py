@@ -264,21 +264,24 @@ def partial_artist_search(artist_input):
 
 
 
-### searching by date ###
+### DATE SEARCH ###
 def date_search(date_input): # YYYY-MM-DD
     found_date = False
     date_input = date_input.split('-')
-    #print(date_input)
+    # print(date_input)
     new_date = date(int(date_input[0]), int(date_input[1]), int(date_input[2]))
-    #print(new_date)
+    # print(new_date)
     new_date_weekday = new_date.weekday()
-    #print(new_date_weekday)
+    # print(new_date_weekday)
     my_saturday_change = new_date_weekday - 5
-    #print(my_saturday_change)
+    # print(my_saturday_change)
     my_sat_delta = my_saturday_change + 7
-    #print(my_sat_delta)
+    # print(my_sat_delta)
     if my_sat_delta == 7:
         date_input = str(new_date)
+    elif my_sat_delta == 8:
+        this_saturday = new_date - timedelta(days=my_saturday_change)
+        date_input = str(this_saturday)
     else:
         this_saturday = new_date - timedelta(days=my_sat_delta)
         date_input = str(this_saturday)
