@@ -2,10 +2,10 @@
 <html>
    <body>
         {% set vars = {'found_naive_song': False} %}
-        {% if search_option == '1' and norp_option == 'Naive' %}
+        {% if search_option == '1' %}
             {% for row in charts %}
-                {% if song_name == row[2] %}
-                <h5> {% print('On ' + row[0] + ' ' + song_name + ' ranked at # ' + row[1] + ' on the Billboard Hot 100 Chart.') %} </h5>
+                {% if song_artist == row[2] %}
+                <h5> {% print('On ' + row[0] + ' ' + song_artist + ' ranked at # ' + row[1] + ' on the Billboard Hot 100 Chart.') %} </h5>
                     {% if vars.update({'found_naive_song': True}) %}
                     {% endif %}
                 {% endif %}
@@ -15,37 +15,64 @@
             {% endif %}
         {% endif %}
 
-
-        {# partial song search #}
-        {% if search_option == '1' and norp_option == 'Partial' %}
-        {% set partial_title = song_name.lower().split(' ') %}
-        {% set song_list = [] %}
-        {% set partial_song_counter = 0 %}
-        {% set vars = {'found_partial_song': False} %}
+        {% set artist = {'found_naive_artist': False} %}
+        {% print(search_option) %}
+        {% if search_option == '2' %}
             {% for row in charts %}
-                {% set song_title = row[2].lower().split(' ')%}
-                {% for word in partial_title %}
-                    {% if word in song_title %}
-                        {% set vars = {'check': True} %}
-                    {% else %}
-                        {% if vars.update({'check': False}) %}
-                        {% endif %}
+                {% if song_artist == row[3] %}
+                    {% if artist.update({'found_naive_artist': True}) %}
                     {% endif %}
-                    {% if vars.update({'check': True}) %}
-                        {{ song_list.append(row[2]) }}
-                        {% if vars.update({'found_partial_song': True}) %}
-                        {% endif %}
-                    {% endif %}
-                {% endfor %}
+                {% endif %}
             {% endfor %}
-            {% if not found_partial_song %}
-            <form action = "/partialsong/" method = "post">
-                <h4> {% print('Did you mean ' + '\'' + normalize_input + '\'' + '? Enter Yes or No: ') %} </h4>
-                <p>Type:</p> <p><input type = "text" name = "clarify" /></p>
-                <p align="center"><a href="~/partial_song_redo.html" ><button class=grey style="height:50px;width:100px" >Go!</button></a></p>
+            {% print(artist) %}
+            {% if not artist.found_naive_artist %}
+                <h5> {% print('Sorry, we couldn\'t find your artist.') %}</h5>
+            {% else %}
+                <h5> Do you want to see <br>1. all of this artist's song rankings or <br>
+                                 2. just the highest rankings for each unique song? <br>Type 1 or 2: </h5>
+            <form action = "/song/" method = "post">
+                <select name = "artist_options" method = "GET" action = "/">
+                    <option value = "{{ artist_options[0] }}" selected>pick one</option>
+                    <option value = "{{ artist_options[1] }}" >1</option>
+                    <option value = "{{ artist_options[2] }}" >2</option>
+                </select>
+                <p align="center"><a href="~/artist.html" ><button class=grey style="height:50px;width:100px" >Go!</button></a></p>
             </form>
             {% endif %}
-        {% endif %}
+    {% endif %}
+   </body>
+</html>
+
+        {# partial song search #}
+{#        {% if search_option == '1' and norp_option == 'Partial' %}#}
+{#        {% set partial_title = song_name.lower().split(' ') %}#}
+{#        {% set song_list = [] %}#}
+{#        {% set partial_song_counter = 0 %}#}
+{#        {% set vars = {'found_partial_song': False} %}#}
+{#            {% for row in charts %}#}
+{#                {% set song_title = row[2].lower().split(' ')%}#}
+{#                {% for word in partial_title %}#}
+{#                    {% if word in song_title %}#}
+{#                        {% set vars = {'check': True} %}#}
+{#                    {% else %}#}
+{#                        {% if vars.update({'check': False}) %}#}
+{#                        {% endif %}#}
+{#                    {% endif %}#}
+{#                    {% if vars.update({'check': True}) %}#}
+{#                        {{ song_list.append(row[2]) }}#}
+{#                        {% if vars.update({'found_partial_song': True}) %}#}
+{#                        {% endif %}#}
+{#                    {% endif %}#}
+{#                {% endfor %}#}
+{#            {% endfor %}#}
+{#            {% if not found_partial_song %}#}
+{#            <form action = "/partialsong/" method = "post">#}
+{#                <h4> {% print('Did you mean ' + '\'' + normalize_input + '\'' + '? Enter Yes or No: ') %} </h4>#}
+{#                <p>Type:</p> <p><input type = "text" name = "clarify" /></p>#}
+{#                <p align="center"><a href="~/artist.html" ><button class=grey style="height:50px;width:100px" >Go!</button></a></p>#}
+{#            </form>#}
+{#            {% endif %}#}
+{#        {% endif %}#}
 {#                {% if clarify == 'Yes' or clarify == 'yes' %}#}
 {##}
 {#                    return partial_song_search(normalize_song)#}
@@ -74,5 +101,3 @@
 {#                print('Sorry, we couldn\'t find your song. Please try again.')#}
 {#        search_again()#}
 
-   </body>
-</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+        {% if artist_option == '1' %}
+        <h5>{% print(artist_input + '\'s songs: ') %}</h5>
+            {% for row in charts %}
+                {% if song_artist == row[3] %}
+                    {% print('\'' + row[2] + '\'' + ' ranked ' + row[1] + ' on the Billboard Charts on ' + row[0] + '.') %}
+                {% endif %}
+            {% endfor %}
+        {% elif choice_input == '2' %}
+            {% set song_dict = {} %}
+            {% for row in charts %}
+                {% if artist_input == row[3] %}
+                    {% if row[2] in song_dict.keys() %}
+                        {% song_dict[row[2]][0].append(row[1]) %}
+                        {% song_dict[row[2]][1].append(row[0]) %}
+                    {% else %}
+                        {% song_dict[row[2]] = ([row[1]], [row[0]]) %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            {% print(artist_input + '\'s songs: ') %}
+            {% for key in song_dict %}
+                {% set ranks = [] %}
+                {% indices = [] %}
+                {% for index, rank in enumerate(song_dict[key][0]) %}
+                    {% ranks.append(rank) %}
+                    {% indices.append(index) %}
+                {% endfor %}
+                {% top_rank = min(ranks) %}
+                {% top_date_index = ranks.index(min(ranks)) %}
+                {% set (top_rank, rank_date) = (top_rank, song_dict[key][1][top_date_index]) %}
+                {% print('\'' + key + '\'' + ' ranked ' + top_rank + ' on the Billboard Charts on ' + rank_date + '.') %}
+            {% endfor %}
+        {% else %}
+            {% print('Sorry, we didn\'t understand that. Please try again.') %}
+        {% endif %}
+    </body>
+</html>
+{#    {% if clarify == 'Yes' or clarify == 'yes' %}#}
+{#        {% set partial_title = normalize_input.lower().split(' ') %}#}
+{#        {% set song_list = [] %}#}
+{#        {% set vars = {'found_partial_song': False} %}#}
+{#            {% for row in charts %}#}
+{#                {% set song_title = row[2].lower().split(' ')%}#}
+{#                {% for word in partial_title %}#}
+{#                    {% if word in song_title %}#}
+{#                        {% set vars = {'check': True} %}#}
+{#                    {% else %}#}
+{#                        {% if vars.update({'check': False}) %}#}
+{#                            <h5>{% print('sorry') %}</h5>#}
+{#                        {% endif %}#}
+{#                    {% endif %}#}
+{#                    {% if vars.update({'check': True}) %}#}
+{#                        {{ song_list.append(row[2]) }}#}
+{#                        <h5>{% print(song_list) %}</h5>#}
+{#                        {% if vars.update({'found_partial_song': True}) %}#}
+{#                        {% endif %}#}
+{#                    {% endif %}#}
+{#                {% endfor %}#}
+{#            {% endfor %}#}
+{#        {% endif %}#}
+{##}
