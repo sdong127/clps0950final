@@ -1,6 +1,8 @@
 <!doctype html>
 <html>
+    <link href="../static/css/results.css" rel="stylesheet" />
    <body>
+   {# song search #}
         {% set vars = {'found_naive_song': False} %}
         {% if search_option == '1' %}
             {% for row in charts %}
@@ -14,7 +16,7 @@
                 <h5> {% print('Sorry, we couldn\'t find your song.') %}</h5>
             {% endif %}
         {% endif %}
-
+   {# artist search #}
         {% set artist = {'found_naive_artist': False} %}
         {% if search_option == '2' %}
             {% for row in charts %}
@@ -39,7 +41,7 @@
             </form>
             {% endif %}
         {% endif %}
-
+   {# date search #}
         {% print(date_input) %}
         {% if date_input != None %}
             {% set date = {'found_date': False} %}

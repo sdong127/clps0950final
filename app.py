@@ -33,23 +33,18 @@ def artist_dropdown():
 
 artist_options = [0, 1, 2]
 
-def saturday_date(date_input):
-    date_input = date_input.split('-')
-    #print(date_input)
-    new_date = date(int(date_input[0]), int(date_input[1]), int(date_input[2]))
-    #print(new_date)
+def saturday_date(date_search):
+    date_search = date_search.split('-')
+    new_date = date(int(date_search[0]), int(date_search[1]), int(date_search[2]))
     new_date_weekday = new_date.weekday()
-    #print(new_date_weekday)
     my_saturday_change = new_date_weekday - 5
-    #print(my_saturday_change)
     my_sat_delta = my_saturday_change + 7
-    #print(my_sat_delta)
     if my_sat_delta == 7:
-        date_input = str(new_date)
+        date_search = str(new_date)
     else:
         this_saturday = new_date - timedelta(days=my_sat_delta)
-        date_input = str(this_saturday)
-    return date_input
+        date_search = str(this_saturday)
+    return date_search
 
 @app.route('/song/', methods=['POST'])
 def type_search():
@@ -60,7 +55,7 @@ def type_search():
     print(song_artist)
     print(date_search)
     print(rank_search)
-    if date_search:
+    if date_search == True:
         date_input = saturday_date(date_search)
         print(date_input)
     # norp_option = dropdown2()
