@@ -16,7 +16,6 @@
         {% endif %}
 
         {% set artist = {'found_naive_artist': False} %}
-        {% print(search_option) %}
         {% if search_option == '2' %}
             {% for row in charts %}
                 {% if song_artist == row[3] %}
@@ -41,27 +40,39 @@
             {% endif %}
         {% endif %}
 
-        {% set date = {'found_date': False} %}
-            {% date_input = date_search.split('-') %}
-            {% new_date = date(int(date_input[0]), int(date_input[1]), int(date_input[2])) %}
-            {% new_date_weekday = new_date.weekday() %}
-            {% my_saturday_change = new_date_weekday - 5 %}
-            {% my_sat_delta = my_saturday_change + 7 %}
-            {% if my_sat_delta == 7 %}
-                {% date_input = str(new_date) %}
-            {% else %}
-                {% this_saturday = new_date - timedelta(days=my_sat_delta) %}
-                {% date_input = str(this_saturday) %}
-            {% endif %}
-            #print(new_date_input)
+        {% print(date_input) %}
+        {% if date_input != None %}
+            {% set date = {'found_date': False} %}
                 {% for row in charts %}
-                    {% if date_search == row[0] %}
-                        {% if date.update{'found_date': True} %}
+                    {% if date_input == row[0] %}
+                        {% if date.update({'found_date': True}) %}
                         {% endif %}
-            {% if not date.found_date %}
-                {% print('Sorry, we couldn\'t find the chart for the date you inputted. '
-                      'You have access to weekly Billboard charts starting from January 6th, 1962, to April 10th, 2021. '
-                      'Please try again.') %}
+                    {% endif %}
+                {% endfor %}
+        {% endif %}
+        {% if not date.found_date %}
+            {% print('Sorry, we couldn\'t find the chart for the date you inputted. '
+                  'You have access to weekly Billboard charts starting from January 6th, 1962, to April 10th, 2021. '
+                  'Please try again.') %}
+        {% else %}
+            {% if rank_search != '0' %}
+                {% for row in charts %}
+                    {% if date_input == row[0] %}
+                        {% if row[1] == rank_search %}
+                            <p>{% print(row[2] + ' by ' + row[3] + ' was ranked #' + rank_search + '.') %}</p>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% elif rank_search == '0' %}
+                {% for row in charts %}
+                    {% if date_input == row[0] %}
+                        <p>{% print(row[2] + ' by ' + row[3] + ' was ranked #' + row[1] + '.') %}</p><br>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <h5>Sorry, didn't recognize that. Please try again.</h5>
+            {% endif %}
+        {% endif %}
    </body>
 </html>
 

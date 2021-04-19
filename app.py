@@ -8,6 +8,7 @@ import csv
 from bs4 import BeautifulSoup
 import nltk
 from collections import Counter
+from datetime import date, timedelta
 
 
 app = Flask(__name__)
@@ -32,16 +33,43 @@ def artist_dropdown():
 
 artist_options = [0, 1, 2]
 
+def saturday_date(date_input):
+    date_input = date_input.split('-')
+    #print(date_input)
+    new_date = date(int(date_input[0]), int(date_input[1]), int(date_input[2]))
+    #print(new_date)
+    new_date_weekday = new_date.weekday()
+    #print(new_date_weekday)
+    my_saturday_change = new_date_weekday - 5
+    #print(my_saturday_change)
+    my_sat_delta = my_saturday_change + 7
+    #print(my_sat_delta)
+    if my_sat_delta == 7:
+        date_input = str(new_date)
+    else:
+        this_saturday = new_date - timedelta(days=my_sat_delta)
+        date_input = str(this_saturday)
+    return date_input
+
 @app.route('/song/', methods=['POST'])
 def type_search():
     search_option = dropdown()
     song_artist = request.form['song_artist']
+    date_search = request.form['date_search']
+    rank_search = request.form['rank_search']
     print(song_artist)
+    print(date_search)
+    print(rank_search)
+    if date_search:
+        date_input = saturday_date(date_search)
+        print(date_input)
     # norp_option = dropdown2()
     with open('charts.csv', 'r') as file:
         charts = csv.reader(file)
         data = list(charts)
-        return render_template('song.html', song_artist=song_artist, search_option=search_option, artist_options=artist_options, charts=data)
+        return render_template('song.html', song_artist=song_artist, search_option=search_option,
+                               artist_options=artist_options, charts=data, date_search=date_search,
+                               rank_search=rank_search, date_input=date_input)
 
     # return redirect(url_for('result', name=song_name))
 
@@ -54,12 +82,14 @@ def artist_search():
         data = list(charts)
     return render_template('artist.html', song_artist=song_artist, artist_option=artist_option, charts=data)
 
-# @app.route('/date/', methods=['POST'])
+# @app.route('/song/', methods=['POST'])
 # def song_search():
+#     date_search = request.form['date_search']
+#     rank_search = request.form['rank_search']
 #     with open('charts.csv', 'r') as file:
 #         charts = csv.reader(file)
 #         data = list(charts)
-#     return render_template
+#     return render_template('song.html', date_search=date_search, rank_search=rank_search, charts=data)
 
 if __name__ == '__main__':
     app.run(debug=True)
