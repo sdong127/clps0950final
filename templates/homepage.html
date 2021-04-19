@@ -25,10 +25,9 @@
                 <div class="row">
                     <div class="col-xl-9 mx-auto"><h1 class="mb-5">Welcome to Billboard Song Search!</h1></div>
                     <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-                        <p>1. Search by song: the ranks achieved by a certain song on the Billboard charts<br>
-                            2. Search by artist: songs by a certain artist that made the charts and when<br></p>
-                        <p> A NAIVE search is one in which you have to search the exact title with the correct capitalization <br>
-                            A PARTIAL search is one in which you can search any keywords, case insensitive</p>
+                        <h6>1. Search by song: the ranks achieved by a certain song on the Billboard charts<br>
+                            2. Search by artist: songs by a certain artist that made the charts and when<br></h6>
+                        <p> **Please make sure to enter the song title or artist name is spelled correctly with appropriate capitalization.</p>
                         <form action = "/song/" method = "post">
                             <select name = "options" method = "GET" action = "/">
                                 <option value = "{{ options[0] }}" selected>pick one</option>

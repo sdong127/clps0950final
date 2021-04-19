@@ -56,9 +56,12 @@ def type_search():
     print(date_search)
     print(rank_search)
     if date_search == True:
+        print(date_search)
         date_input = saturday_date(date_search)
         print(date_input)
     # norp_option = dropdown2()
+    else:
+        return
     with open('charts.csv', 'r') as file:
         charts = csv.reader(file)
         data = list(charts)
