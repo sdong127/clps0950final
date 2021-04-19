@@ -54,6 +54,13 @@ def artist_search():
         data = list(charts)
     return render_template('artist.html', song_artist=song_artist, artist_option=artist_option, charts=data)
 
+# @app.route('/date/', methods=['POST'])
+# def song_search():
+#     with open('charts.csv', 'r') as file:
+#         charts = csv.reader(file)
+#         data = list(charts)
+#     return render_template
+
 if __name__ == '__main__':
     app.run(debug=True)
 

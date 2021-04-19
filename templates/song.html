@@ -39,7 +39,29 @@
                 <p align="center"><a href="~/artist.html" ><button class=grey style="height:50px;width:100px" >Go!</button></a></p>
             </form>
             {% endif %}
-    {% endif %}
+        {% endif %}
+
+        {% set date = {'found_date': False} %}
+            {% date_input = date_search.split('-') %}
+            {% new_date = date(int(date_input[0]), int(date_input[1]), int(date_input[2])) %}
+            {% new_date_weekday = new_date.weekday() %}
+            {% my_saturday_change = new_date_weekday - 5 %}
+            {% my_sat_delta = my_saturday_change + 7 %}
+            {% if my_sat_delta == 7 %}
+                {% date_input = str(new_date) %}
+            {% else %}
+                {% this_saturday = new_date - timedelta(days=my_sat_delta) %}
+                {% date_input = str(this_saturday) %}
+            {% endif %}
+            #print(new_date_input)
+                {% for row in charts %}
+                    {% if date_search == row[0] %}
+                        {% if date.update{'found_date': True} %}
+                        {% endif %}
+            {% if not date.found_date %}
+                {% print('Sorry, we couldn\'t find the chart for the date you inputted. '
+                      'You have access to weekly Billboard charts starting from January 6th, 1962, to April 10th, 2021. '
+                      'Please try again.') %}
    </body>
 </html>
 

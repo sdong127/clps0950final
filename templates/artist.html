@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
 </head>
 <body>
+
         {% if artist_option == '1' %}
         <h5>{% print(artist_input + '\'s songs: ') %}</h5>
             {% for row in charts %}
@@ -11,10 +12,10 @@
                     {% print('\'' + row[2] + '\'' + ' ranked ' + row[1] + ' on the Billboard Charts on ' + row[0] + '.') %}
                 {% endif %}
             {% endfor %}
-        {% elif choice_input == '2' %}
+        {% elif artist_option == '2' %}
             {% set song_dict = {} %}
             {% for row in charts %}
-                {% if artist_input == row[3] %}
+                {% if song_artist == row[3] %}
                     {% if row[2] in song_dict.keys() %}
                         {% song_dict[row[2]][0].append(row[1]) %}
                         {% song_dict[row[2]][1].append(row[0]) %}
@@ -23,7 +24,7 @@
                     {% endif %}
                 {% endif %}
             {% endfor %}
-            {% print(artist_input + '\'s songs: ') %}
+            {% print(song_artist + '\'s songs: ') %}
             {% for key in song_dict %}
                 {% set ranks = [] %}
                 {% indices = [] %}
