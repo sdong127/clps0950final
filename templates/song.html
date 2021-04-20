@@ -65,17 +65,25 @@
                   'Please try again.') %}
         {% else %}
             {% if rank_search != '0' %}
+                {% set rank = {'found_rank': False} %}
                 {% for row in charts %}
                     {% if date_input == row[0] %}
                         {% if row[1] == rank_search %}
                             <h5>{% print(row[2] + ' by ' + row[3] + ' was ranked #' + rank_search + '.') %}</h5>
+                            {% if rank.update({'found_rank': True}) %}
+                            {% endif %}
                         {% endif %}
                     {% endif %}
                 {% endfor %}
+                {% if not rank.found_rank %}
+                    <h5>{% print('Sorry, we didn\'t understand that. Please try again.') %}</h5>
+                {% endif %}
+
+
             {% elif rank_search == '0' %}
                 {% for row in charts %}
                     {% if date_input == row[0] %}
-                        <h5>{% print(row[2] + ' by ' + row[3] + ' was ranked #' + row[1] + '.') %}</h5><br>
+                        <p>{% print(row[2] + ' by ' + row[3] + ' was ranked #' + row[1] + '.') %}</p><br>
                     {% endif %}
                 {% endfor %}
             {% else %}
