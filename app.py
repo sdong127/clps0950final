@@ -10,6 +10,7 @@ import nltk
 from collections import Counter
 from datetime import date, timedelta
 
+song_artist = ''
 
 app = Flask(__name__)
 
@@ -51,6 +52,7 @@ def saturday_date(date_search):
 
 @app.route('/song/', methods=['POST'])
 def type_search():
+    global song_artist
     search_option = dropdown()
     song_artist = request.form['song_artist']
     date_search = request.form['date_search']
@@ -65,7 +67,7 @@ def type_search():
     if not date_search:
         date_input = None
     # norp_option = dropdown2()
-    print(date_input)
+    # print(date_input)
     with open('charts.csv', 'r') as file:
         charts = csv.reader(file)
         data = list(charts)
@@ -77,8 +79,10 @@ def type_search():
 
 @app.route('/artist/', methods=['POST'])
 def artist_search():
+    # print('hi lakshmi')
+    # import pdb; pdb.set_trace()
     artist_option = artist_dropdown()
-    song_artist = request.form['song_artist']
+    # song_artist = request.form['song_artist']
     with open('charts.csv', 'r') as file:
         charts = csv.reader(file)
         data = list(charts)

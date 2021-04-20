@@ -3,42 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <link href="../static/css/homepage.css" rel="stylesheet" />
+     <style>
+        body {background-color: powderblue;
+        }
+        p, h5 {color:#0056b3;
+        line-height: 1.5;
+        text-align: center}
+    </style>
 </head>
 <body>
-        {% if artist_options == '1' %}
-        <h5>{% print(artist_input + '\'s songs: ') %}</h5>
+{#        {% print(artist_option) %}#}
+        {% if artist_option == '1' %}
+        <h5>{% print(song_artist + '\'s songs: ') %}</h5>
             {% for row in charts %}
                 {% if song_artist == row[3] %}
-                    {% print('\'' + row[2] + '\'' + ' ranked ' + row[1] + ' on the Billboard Charts on ' + row[0] + '.') %}
+                    <p>{% print('\'' + row[2] + '\'' + ' ranked ' + row[1] + ' on the Billboard Charts on ' + row[0] + '.') %}</p>
                 {% endif %}
             {% endfor %}
-        {% elif artist_options == '2' %}
+        {% elif artist_option == '2' %}
             {% set song_dict = {} %}
             {% for row in charts %}
                 {% if song_artist == row[3] %}
                     {% if row[2] in song_dict.keys() %}
-                        {% song_dict[row[2]][0].append(row[1]) %}
-                        {% song_dict[row[2]][1].append(row[0]) %}
+                        {{ song_dict[row[2]][0].append(row[1]) }}
+                        {{ song_dict[row[2]][1].append(row[0]) }}
                     {% else %}
-                        {% song_dict[row[2]] = ([row[1]], [row[0]]) %}
+                        {% set song_dict=song_dict.__setitem__(song_dict(row[2]), ([row[1]],[row[0]])) %}
                     {% endif %}
                 {% endif %}
             {% endfor %}
-            {% print(song_artist + '\'s songs: ') %}
+            <h5>{% print(song_artist + '\'s songs: ') %}</h5>
             {% for key in song_dict %}
                 {% set ranks = [] %}
-                {% indices = [] %}
+                {% set indices = [] %}
                 {% for index, rank in enumerate(song_dict[key][0]) %}
-                    {% ranks.append(rank) %}
-                    {% indices.append(index) %}
+                    {{ ranks.append(rank) }}
+                    {{ indices.append(index) }}
                 {% endfor %}
-                {% top_rank = min(ranks) %}
-                {% top_date_index = ranks.index(min(ranks)) %}
+                {% set top_rank = min(ranks) %}
+                {% set top_date_index = ranks.index(min(ranks)) %}
                 {% set (top_rank, rank_date) = (top_rank, song_dict[key][1][top_date_index]) %}
-                {% print('\'' + key + '\'' + ' ranked ' + top_rank + ' on the Billboard Charts on ' + rank_date + '.') %}
+                <p>{% print('\'' + key + '\'' + ' ranked ' + top_rank + ' on the Billboard Charts on ' + rank_date + '.') %}</p>
             {% endfor %}
         {% else %}
-            {% print('Sorry, we didn\'t understand that. Please try again.') %}
+            <h5>{% print('Sorry, we didn\'t understand that. Please try again.') %} </h5>
         {% endif %}
     </body>
 </html>
