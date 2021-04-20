@@ -1,4 +1,4 @@
-###Team HASH CLPS0950 Final, Brown University: Billboard Song Search
+### Team HASH CLPS0950 Final, Brown University: Billboard Song Search
 
 #### Billboard Song Search is a program that parses through Dhruvil Dave's "Billboard The Hot 100 Songs" dataset, available on kaggle. 
 ##### The dataset contains information about songs that made the weekly top 100 according to Billboard starting from August 4th, 1958. Due to a discrepancy in the data, our program runs based on the dataset starting from 1962. 
