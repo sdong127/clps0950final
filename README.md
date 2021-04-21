@@ -1,6 +1,6 @@
 ### **Team HASH CLPS0950 Final, Brown University: Billboard Song Search by Haley Seo and Shirley Dong**
 
-#### Billboard Song Search is a program that parses through Dhruvil Dave's "Billboard The Hot 100 Songs" dataset, available on Kaggle: [Link](https://www.kaggle.com/dhruvildave/billboard-the-hot-100-songs)
+#### Billboard Song Search is a program that parses through Dhruvil Dave's "Billboard The Hot 100 Songs" dataset, available on Kaggle: [Billboard "The Hot 100" Songs](https://www.kaggle.com/dhruvildave/billboard-the-hot-100-songs)
 *The dataset contains information about songs that made the weekly top 100 according to Billboard starting from August 4th, 1958. Due to a discrepancy in the data, our program runs based on the dataset starting from 1962.* 
 #### Our program, Billboard Song Search, gives a user the ability to look through the dataset and find specific pieces of information, such as: 
 1. Search by song: the ranks achieved by a certain song on the Billboard charts 
