@@ -1,72 +1,96 @@
 <!doctype html>
 <html>
 <head>
-    <link href="../static/css/homepage.css" rel="stylesheet" />
+
+    <!-- add aesthetics to song.html with css -->
     <style>
         body {background-color: powderblue;
         }
-        p, h5 {color:#0056b3;
+        p, h5, h1 {color:#0056b3;
         line-height: 1.5;
         text-align: center}
     </style>
+
+    <!-- website title -->
+    <h1>BILLBOARD SONG SEARCH<br></h1>
+
 </head>
-   <body>
-   {# song search #}
-        {% set vars = {'found_naive_song': False} %}
-        {% if search_option == '1' %}
+
+<body>
+   <!-- song search -->
+       {% set vars = {'found_naive_song': False} %}
+       <!-- check if user chose song search -->
+       {% if search_option == '1' %}
             {% for row in charts %}
+                <!-- check if user input song is in row of charts -->
                 {% if song_artist == row[2] %}
-                <h5> {% print('On ' + row[0] + ' ' + song_artist + ' ranked at #' + row[1] + ' on the Billboard Hot 100 Chart.') %} </h5>
+                <h5> {% print('On ' + row[0] + ' ' + song_artist + ' by ' + row[3] + ' ranked at #' + row[1] +
+                        ' on the Billboard Hot 100 Chart.') %} </h5>
                     {% if vars.update({'found_naive_song': True}) %}
                     {% endif %}
                 {% endif %}
             {% endfor %}
-            {% if not vars.found_naive_song %}
+
+           {% if not vars.found_naive_song %}
                 <h5> {% print('Sorry, we couldn\'t find your song.') %}</h5>
             {% endif %}
         {% endif %}
-   {# artist search #}
+
+
+   <!-- artist search -->
         {% set artist = {'found_naive_artist': False} %}
-        {% if search_option == '2' %}
+       <!-- check if user chose artist search -->
+       {% if search_option == '2' %}
             {% for row in charts %}
+                <!-- check if user input artist is in row of charts -->
                 {% if song_artist == row[3] %}
                     {% if artist.update({'found_naive_artist': True}) %}
                     {% endif %}
                 {% endif %}
             {% endfor %}
-{#            {% print(artist) %}#}
-            {% if not artist.found_naive_artist %}
+
+           {% if not artist.found_naive_artist %}
                 <h5> {% print('Sorry, we couldn\'t find your artist.') %}</h5>
-            {% else %}
+           <!-- if artist found in charts, ask for user preference -->
+           {% else %}
                 <h5> Do you want to see <br>1. all of this artist's song rankings or <br>
                                  2. just the highest rankings for each unique song? <br>Type 1 or 2: </h5>
-            <form action = "/artist/" method = "post">
-                <select name = "artist_options" method = "GET" action = "/">
-                    <option value = "{{ artist_options[0] }}" selected>pick one</option>
-                    <option value = "{{ artist_options[1] }}" >1</option>
-                    <option value = "{{ artist_options[2] }}" >2</option>
-                </select>
-                <p align="center"><a href="~/artist.html" ><button class=grey style="height:50px;width:100px" >Go!</button></a></p>
-            </form>
-            {% endif %}
-        {% endif %}
-   {# date search #}
+
+               <!-- create dropdown for user to choose and store user selection -->
+               <form action = "/artist/" method = "post">
+                    <select name = "artist_options" method = "GET" action = "/">
+                        <option value = "{{ artist_options[0] }}" selected>pick one</option>
+                        <option value = "{{ artist_options[1] }}" >1</option>
+                        <option value = "{{ artist_options[2] }}" >2</option>
+                    </select>
+
+                    <!-- button that routes to artist.html when clicked -->
+                    <p align="center"><a href="~/artist.html" ><button class=grey style="height:50px;width:100px" >Go!</button></a></p>
+               </form>
+           {% endif %}
+       {% endif %}
+
+
+   <!-- date search -->
         {% if date_input != None %}
             {% set date = {'found_date': False} %}
                 {% for row in charts %}
+                    <!-- check if user input date is in row in charts -->
                     {% if date_input == row[0] %}
                         {% if date.update({'found_date': True}) %}
                         {% endif %}
                     {% endif %}
                 {% endfor %}
+
         {% if not date.found_date %}
-            {% print('Sorry, we couldn\'t find the chart for the date you inputted. '
+            <h5>{% print('Sorry, we couldn\'t find the chart for the date you inputted. '
                   'You have access to weekly Billboard charts starting from January 6th, 1962, to April 10th, 2021. '
-                  'Please try again.') %}
+                  'Please try again.') %}</h5>
         {% else %}
             {% if rank_search != '0' %}
                 {% set rank = {'found_rank': False} %}
                 {% for row in charts %}
+                    <!-- check for user input rank in row in charts -->
                     {% if date_input == row[0] %}
                         {% if row[1] == rank_search %}
                             <h5>{% print(row[2] + ' by ' + row[3] + ' was ranked #' + rank_search + '.') %}</h5>
@@ -79,76 +103,19 @@
                     <h5>{% print('Sorry, we didn\'t understand that. Please try again.') %}</h5>
                 {% endif %}
 
-
             {% elif rank_search == '0' %}
                 {% for row in charts %}
                     {% if date_input == row[0] %}
+                        <!-- print every row in chart at user input date -->
                         <p>{% print(row[2] + ' by ' + row[3] + ' was ranked #' + row[1] + '.') %}</p><br>
                     {% endif %}
                 {% endfor %}
+
             {% else %}
                 <h5>Sorry, didn't recognize that. Please try again.</h5>
             {% endif %}
         {% endif %}
         {% endif %}
+
    </body>
 </html>
-
-        {# partial song search #}
-{#        {% if search_option == '1' and norp_option == 'Partial' %}#}
-{#        {% set partial_title = song_name.lower().split(' ') %}#}
-{#        {% set song_list = [] %}#}
-{#        {% set partial_song_counter = 0 %}#}
-{#        {% set vars = {'found_partial_song': False} %}#}
-{#            {% for row in charts %}#}
-{#                {% set song_title = row[2].lower().split(' ')%}#}
-{#                {% for word in partial_title %}#}
-{#                    {% if word in song_title %}#}
-{#                        {% set vars = {'check': True} %}#}
-{#                    {% else %}#}
-{#                        {% if vars.update({'check': False}) %}#}
-{#                        {% endif %}#}
-{#                    {% endif %}#}
-{#                    {% if vars.update({'check': True}) %}#}
-{#                        {{ song_list.append(row[2]) }}#}
-{#                        {% if vars.update({'found_partial_song': True}) %}#}
-{#                        {% endif %}#}
-{#                    {% endif %}#}
-{#                {% endfor %}#}
-{#            {% endfor %}#}
-{#            {% if not found_partial_song %}#}
-{#            <form action = "/partialsong/" method = "post">#}
-{#                <h4> {% print('Did you mean ' + '\'' + normalize_input + '\'' + '? Enter Yes or No: ') %} </h4>#}
-{#                <p>Type:</p> <p><input type = "text" name = "clarify" /></p>#}
-{#                <p align="center"><a href="~/artist.html" ><button class=grey style="height:50px;width:100px" >Go!</button></a></p>#}
-{#            </form>#}
-{#            {% endif %}#}
-{#        {% endif %}#}
-{#                {% if clarify == 'Yes' or clarify == 'yes' %}#}
-{##}
-{#                    return partial_song_search(normalize_song)#}
-{#                elif clarify == 'No' or clarify == 'no':#}
-{#                    print('Sorry, we couldn\'t find your song. Please try again.')#}
-{#                    return search_again()#}
-{#                else:#}
-{#                    print('Sorry, we didn\'t recognize that. Please try again.')#}
-{#                    return search_again()#}
-{#                {% endif %}#}
-{#            {% endif %}#}
-{#        {% endif %}#}
-{#            song_series = pd.Series(data=song_list)#}
-{#            unique_series = pd.Series(song_series.unique())#}
-{#            if not unique_series.empty:#}
-{#                correction_input = input('Did you mean one of these songs? Enter Yes or No: ')#}
-{#                if correction_input == 'Yes' or correction_input == 'yes':#}
-{#                    index_input = input('Enter the corresponding number to the song you meant: ')#}
-{#                    actual_song = unique_series[int(index_input)]#}
-{#                    return naive_song_search(actual_song)#}
-{#                elif correction_input == 'No' or correction_input == 'no':#}
-{#                    print('Sorry, we couldn\'t find your song. Please try again.')#}
-{#                else:#}
-{#                    print('Sorry, we didn\'t understand that. Please try again.')#}
-{#            else:#}
-{#                print('Sorry, we couldn\'t find your song. Please try again.')#}
-{#        search_again()#}
-

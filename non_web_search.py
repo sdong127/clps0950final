@@ -1,10 +1,8 @@
 import csv
 import pandas as pd
-from datetime import date
-from datetime import timedelta
+from datetime import date, timedelta
 import re
 from bs4 import BeautifulSoup
-import nltk
 from collections import Counter
 import sys
 
@@ -133,7 +131,7 @@ def naive_song_search(song_input):
         for row in charts:
             # check if song_input is in the row
             if song_input == row[2]:
-                print('On ' + row[0] + ' ' + song_input + ' ranked at #' + row[1] + ' on the Billboard Hot 100 Chart.')
+                print('On ' + row[0] + ' ' + song_input + ' by ' + row[3] + ' ranked at #' + row[1] + ' on the Billboard Hot 100 Chart.')
                 found_naive_song = True
 
         if not found_naive_song:
@@ -257,7 +255,7 @@ def naive_artist_search(artist_input):
                         song_dict[row[2]][0].append(row[1])
                         song_dict[row[2]][1].append(row[0])
                     else:
-                        # if song doesn't already exist in song_dict, append its rank and date as a tuple of lists
+                        # if song doesn't already exist in song_dict, add it as a key and append its rank and date as a tuple of lists
                         song_dict[row[2]] = ([row[1]], [row[0]])
 
             print(artist_input + '\'s songs: ')
@@ -267,17 +265,21 @@ def naive_artist_search(artist_input):
                 ranks = []
                 # initiate list of indices for list of ranks
                 indices = []
+
                 # loop through song_dict keys' ranks
                 for index, rank in enumerate(song_dict[key][0]):
                     ranks.append(rank)
                     indices.append(index)
                 # get top rank for the song
+
                 top_rank = min(ranks)
                 # get the index of the top rank in ranks list
                 top_date_index = ranks.index(min(ranks))
                 # create tuple for top rank and that rank's date
                 (top_rank, rank_date) = (top_rank, song_dict[key][1][top_date_index])
-                print('\'' + key + '\'' + ' ranked ' + top_rank + ' on the Billboard Charts on ' + rank_date + '.')
+
+                # print all artist's top ranking unique songs
+                print('\'' + key + '\'' + ' ranked #' + top_rank + ' on the Billboard Charts on ' + rank_date + '.')
         else:
             print('Sorry, we didn\'t understand that. Please try again.')
     return search_again()
@@ -311,8 +313,9 @@ def partial_artist_search(artist_input):
 
         # call global variable partial_artist_counter
         global partial_artist_counter
-        print(found_partial_artist)
-        print(partial_artist_counter)
+        # print(found_partial_artist)
+        # print(partial_artist_counter)
+
         # make sure artist input was not already in charts and user has not already searched the same input
         if not found_partial_artist and partial_artist_counter == 0:
             # normalize artist_input
@@ -400,8 +403,8 @@ def date_search(date_input):
                 found_date = True
         file.close()
     if not found_date:
-        print('Sorry, we couldn\'t find the chart for the date you inputted. '
-              'You have access to weekly Billboard charts starting from January 6th, 1962, to April 10th, 2021. '
+        print('Sorry, we couldn\'t find the chart for the date you inputted.\n'
+              'You have access to weekly Billboard charts starting from January 6th, 1962, to April 10th, 2021.\n'
               'Please try again.')
         return search_again()
 
